@@ -12,13 +12,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.donggyeong.producer.dto.DataRequest;
+import me.donggyeong.producer.dto.SourceDataRequest;
 import me.donggyeong.producer.enums.Action;
 
 @Service
 @RequiredArgsConstructor
 public class SchedulingService {
 	private final KafkaProducerService kafkaProducerService;
+
+	private static long count = 0;
 
 	@Scheduled(cron = "0/10 * * * * ?")
 	public void scheduleSendingDataRequest() {
@@ -67,17 +69,21 @@ public class SchedulingService {
 				break;
 		}
 
-		Map<String, Object> document = new HashMap<>();
-		document.put("tenant", "samsungsds");
-		document.put("id", timestamp);
-		document.put("category", category);
-		document.put("title", "test title " + timestamp);
-		document.put("description", "test description " + timestamp);
-		document.put("creator", "Noh Donggyeong");
-		document.put("updater", "Noh Donggyeong");
-		document.put("createdAt", formattedDate);
-		document.put("updatedAt", formattedDate);
-		DataRequest dataRequest = new DataRequest(action, document);
-		kafkaProducerService.sendDataRequest(dataRequest);
+		Map<String, Object> data = new HashMap<>();
+		data.put("source", "hub");
+		long dataId = count;
+		if (!Action.DELETE.equals(action)) {
+			count++;
+		}
+		data.put("dataId", dataId);
+		data.put("category", category);
+		data.put("title", "test title " + timestamp);
+		data.put("description", "test description " + timestamp);
+		data.put("creator", "Noh Donggyeong");
+		data.put("updater", "Noh Donggyeong");
+		data.put("createdAt", formattedDate);
+		data.put("updatedAt", formattedDate);
+		SourceDataRequest sourceDataRequest = new SourceDataRequest(action, "hub", dataId, data);
+		kafkaProducerService.sendDataRequest(sourceDataRequest);
 	}
 }

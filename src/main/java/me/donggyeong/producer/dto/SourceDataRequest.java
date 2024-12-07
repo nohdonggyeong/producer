@@ -11,9 +11,13 @@ import me.donggyeong.producer.enums.Action;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class DataRequest {
+public class SourceDataRequest {
 	@NotNull(message = "'action' is required.")
 	private Action action;
-	@NotNull(message = "'document' is required.")
-	private Map<String, Object> document;
+	@NotNull(message = "'source' is required.")
+	private String source;
+	@NotNull(message = "'dataId' is required.")
+	private Long dataId;
+	@NotNull(message = "'data' is required.")
+	private Map<String, Object> data;
 }

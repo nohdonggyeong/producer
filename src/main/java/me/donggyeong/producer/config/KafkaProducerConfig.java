@@ -13,7 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import me.donggyeong.producer.dto.DataRequest;
+import me.donggyeong.producer.dto.SourceDataRequest;
 
 @Configuration
 public class KafkaProducerConfig {
@@ -21,7 +21,7 @@ public class KafkaProducerConfig {
 	private String bootstrapServers;
 
 	@Bean
-	public ProducerFactory<String, DataRequest> producerFactory() {
+	public ProducerFactory<String, SourceDataRequest> producerFactory() {
 		Map<String, Object> configProps = new HashMap<>();
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -30,7 +30,7 @@ public class KafkaProducerConfig {
 	}
 
 	@Bean
-	public KafkaTemplate<String, DataRequest> kafkaTemplate() {
+	public KafkaTemplate<String, SourceDataRequest> kafkaTemplate() {
 		return new KafkaTemplate<>(producerFactory());
 	}
 }
