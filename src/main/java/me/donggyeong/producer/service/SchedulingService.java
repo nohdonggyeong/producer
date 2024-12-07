@@ -71,11 +71,10 @@ public class SchedulingService {
 
 		Map<String, Object> data = new HashMap<>();
 		data.put("source", "hub");
-		long dataId = count;
 		if (!Action.DELETE.equals(action)) {
 			count++;
 		}
-		data.put("dataId", dataId);
+		data.put("dataId", count);
 		data.put("category", category);
 		data.put("title", "test title " + timestamp);
 		data.put("description", "test description " + timestamp);
@@ -83,7 +82,7 @@ public class SchedulingService {
 		data.put("updater", "Noh Donggyeong");
 		data.put("createdAt", formattedDate);
 		data.put("updatedAt", formattedDate);
-		SourceDataRequest sourceDataRequest = new SourceDataRequest(action, "hub", dataId, data);
+		SourceDataRequest sourceDataRequest = new SourceDataRequest(action, "hub", count, data);
 		kafkaProducerService.sendDataRequest(sourceDataRequest);
 	}
 }
