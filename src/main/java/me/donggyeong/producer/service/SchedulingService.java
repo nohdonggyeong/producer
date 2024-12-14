@@ -22,7 +22,7 @@ public class SchedulingService {
 
 	private static long count = 0;
 
-	@Scheduled(cron = "0/10 * * * * ?")
+	@Scheduled(cron = "0/2 * * * * ?")
 	public void scheduleSendingDataRequest() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.KOREA);
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
