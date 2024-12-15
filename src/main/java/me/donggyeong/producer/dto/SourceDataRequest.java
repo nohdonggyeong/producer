@@ -14,10 +14,10 @@ import me.donggyeong.producer.enums.Action;
 public class SourceDataRequest {
 	@NotNull(message = "'action' is required.")
 	private Action action;
-	@NotNull(message = "'targetName' is required.")
-	private String targetName;
-	@NotNull(message = "'documentId' is required.")
-	private Long documentId;
-	@NotNull(message = "'documentBody' is required.")
-	private Map<String, Object> documentBody;
+	@NotNull(message = "'target' is required.")
+	private String target;
+	@NotNull(message = "'docId' is required.")
+	private String docId;
+	@NotNull(message = "'docBody' is required.")
+	private Map<String, Object> docBody;
 }

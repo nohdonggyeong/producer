@@ -82,7 +82,7 @@ public class SchedulingService {
 		data.put("updater", "Noh Donggyeong");
 		data.put("createdAt", formattedDate);
 		data.put("updatedAt", formattedDate);
-		SourceDataRequest sourceDataRequest = new SourceDataRequest(action, "hub", count, data);
+		SourceDataRequest sourceDataRequest = new SourceDataRequest(action, "hub", "id-" + count, data);
 		kafkaProducerService.sendDataRequest(sourceDataRequest);
 	}
 }
