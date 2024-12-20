@@ -1,25 +1,45 @@
 package me.donggyeong.producer.service;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
-import me.donggyeong.producer.dto.SourceDataRequest;
+import me.donggyeong.producer.dto.ItemRequest;
+import me.donggyeong.producer.dto.SourceDataResponse;
 import me.donggyeong.producer.enums.Action;
 
 @Service
 @RequiredArgsConstructor
 public class SchedulingService {
+	private final SourceDataService sourceDataService;
 	private final KafkaProducerService kafkaProducerService;
+	private final ObjectMapper objectMapper;
 
+	private Long offsetId;
+
+	@Scheduled(cron = "0/10 * * * * ?")
+	public void scheduleSendingDataRequest() {
+		if (offsetId == null) {
+			offsetId = 0L;
+		}
+
+		List<SourceDataResponse> sourceDataResponseList = sourceDataService.fetchUpTo10AfterOffset(offsetId);
+		for (SourceDataResponse sourceDataResponse : sourceDataResponseList) {
+			Map<String, Object> map = objectMapper.convertValue(sourceDataResponse, Map.class);
+			ItemRequest itemRequest = new ItemRequest(Action.INDEX, "movie-evaluation", sourceDataResponse.getId().toString(), map);
+			kafkaProducerService.sendDataRequest(itemRequest);
+			offsetId = sourceDataResponse.getId();
+		}
+	}
+
+
+	// v1 scheduleSendingDataRequest method
+	/*
 	private static long count = 0;
 
 	@Scheduled(cron = "0/2 * * * * ?")
@@ -82,7 +102,8 @@ public class SchedulingService {
 		data.put("updater", "Noh Donggyeong");
 		data.put("createdAt", formattedDate);
 		data.put("updatedAt", formattedDate);
-		SourceDataRequest sourceDataRequest = new SourceDataRequest(action, "hub", "id-" + count, data);
-		kafkaProducerService.sendDataRequest(sourceDataRequest);
+		ItemRequest itemRequest = new ItemRequest(action, "hub", "id-" + count, data);
+		kafkaProducerService.sendDataRequest(itemRequest);
 	}
+	*/
 }

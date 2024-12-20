@@ -11,7 +11,7 @@ import me.donggyeong.producer.enums.Action;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class SourceDataRequest {
+public class ItemRequest {
 	@NotNull(message = "'action' is required.")
 	private Action action;
 	@NotNull(message = "'target' is required.")

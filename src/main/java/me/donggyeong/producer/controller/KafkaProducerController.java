@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.donggyeong.producer.dto.SourceDataRequest;
+import me.donggyeong.producer.dto.ItemRequest;
 import me.donggyeong.producer.service.KafkaProducerService;
 
 @RestController
@@ -18,9 +18,9 @@ public class KafkaProducerController {
 	private final KafkaProducerService kafkaProducerService;
 
 	@PostMapping
-	public ResponseEntity<String> sendDataRequest(@Valid @RequestBody SourceDataRequest sourceDataRequest) {
+	public ResponseEntity<String> sendDataRequest(@Valid @RequestBody ItemRequest itemRequest) {
 		try {
-			kafkaProducerService.sendDataRequest(sourceDataRequest);
+			kafkaProducerService.sendDataRequest(itemRequest);
 			return ResponseEntity.accepted().body("Message sending in progress");
 		} catch (Exception ex) {
 			return ResponseEntity.internalServerError().body("Failed to send message: " + ex.getMessage());

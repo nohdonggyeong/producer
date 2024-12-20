@@ -1,9 +1,30 @@
+# port
+server:
+  port: 8081
+
 spring:
   application:
     name: producer
+
+  # postgresql
+  datasource:
+    url: jdbc:postgresql://localhost:5433/source_database
+    driver-class-name: org.postgresql.Driver
+    username: myuser
+    password: ENC(Bbp2Y1Enmlv46/oT+NwjMfE/pbBxrOfk)
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+  # kafka
   kafka:
     bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
     template:
       default-topic: my-topic
-server:
-  port: 8081
+
+# jasypt
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    password: JasyptPassword12#
